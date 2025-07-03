@@ -30,7 +30,7 @@ builder.Services.AddScoped<IPlanesApiService, PlanesApiService>();
 builder.Services.AddScoped<IArtistasApiService, ArtistasApiService>();
 builder.Services.AddScoped<ICancionesApiService, CancionesApiService>();
 builder.Services.AddScoped<IGenerosApiService, GenerosApiService>();
-
+builder.Services.AddScoped<ICuentaService, CuentaService>();
 // Cuando crees servicios para Planes, Artistas, Canciones, etc.,
 // registra aquí las líneas equivalentes:
 // builder.Services.AddScoped<IPlanesApiService, PlanesApiService>();
