@@ -53,15 +53,17 @@
             <div class="p-4">
                 <h2 class="text-xl fw-bold mb-3">Tus Playlists</h2>
                 <div class="row g-4 mt-3">
-                    <!-- Playlist card -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="bg-gray-800 rounded-xl p-3 hover:bg-gray-700 transition">
-                            <img src="/img/playlist1.jpg" class="w-100 rounded mb-2" alt="Playlist 1">
-                            <h5 class="fw-bold mb-1">Mi Playlist Favorita</h5>
-                            <p class="text-sm text-gray-400 mb-0">Tu música favorita en un solo lugar</p>
+                    @foreach (var lista in Model.ListasPublicas)
+                    {
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="bg-gray-800 rounded-xl p-3 hover:bg-gray-700 transition">
+                                <img src="/img/playlist1.jpg" class="w-100 rounded mb-2" alt="@lista.Nombre">
+                                <h5 class="fw-bold mb-1">@lista.Nombre</h5>
+                                <p class="text-sm text-gray-400 mb-0">Creada por: @lista.CreadaPor</p>
+                                <p class="text-sm text-gray-400 mb-0">Número de canciones: @lista.CancionesEnListas.Count</p>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Puedes duplicar más tarjetas aquí -->
+                    }
                 </div>
             </div>
         </div>
