@@ -1,22 +1,19 @@
-Proyecto Nataly Final : 
-Este proyecto forma parte de un esfuerzo en grupo. Sin embargo, en este archivo se describe específicamente mi avance en el desarrollo del proyecto. El ajuste de la base del proyecto no es parte de mi avance individual, sino que corresponde a la colaboración en equipo.
+# Proyecto Nataly Final
 
-Avances realizados : 
--Cambio en el Login (unión de la API): He implementado la integración entre la API y el sistema de autenticación para el login, lo que permite que el inicio de sesión sea más eficiente y fluido.
+Este proyecto forma parte de un trabajo grupal. En este repositorio se detalla exclusivamente mi avance individual. La base del proyecto fue desarrollada en equipo.
 
--Recuperación de Contraseña: Actualmente, estoy trabajando en la funcionalidad para recuperar contraseñas. Se implementó el flujo de envío de correo con un código de recuperación.
+## Avances personales
 
-Estructura del Proyecto: 
-En este proyecto, cada View está asociada a su propio Controller, lo que facilita la gestión y mantenimiento del código.
+- Integración del login con la API.
+- Implementación del envío de correo para recuperación de contraseña.
+- Avance en vistas de Playlist, Álbumes.
+- Correccion de las Direcciones al logear (esta última aún en desarrollo).
+- Creación y organización de nuevas vistas dentro del sistema MVC.
 
-Estructura de carpetas: 
-RaymiMusic.MVC: Contiene las vistas y controladores de la aplicación MVC.
+## Estructura del proyecto
 
-Pages: Aquí se encuentran las vistas divididas en varias secciones, como Artistas, Canciones, Usuarios, entre otras.
-
-Services: Contiene los servicios que manejan la lógica del negocio.
-
-RaymiMusic.Modelos: Contiene los modelos de datos utilizados en la aplicación.
-
-RaymiMusic.Web.sln: Archivo de solución del proyecto.
-
+- **RaymiMusic.MVC**: vistas y controladores.
+- **Pages**: vistas por secciones (Artistas, Canciones, Usuarios, etc.).
+- **Services**: lógica de negocio.
+- **RaymiMusic.Modelos**: modelos de datos.
+- **RaymiMusic.Web.sln**: solución del proyecto.
