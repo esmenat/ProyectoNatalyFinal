@@ -75,6 +75,24 @@ namespace RaymiMusic.Api.Controllers
 
             return NoContent();
         }
+        [HttpGet("albumes")]
+        public async Task<IActionResult> ObtenerTodos()
+        {
+            var albumes = await _context.Albumes
+                .Include(a => a.Artista) 
+                .Select(a => new
+                {
+                    a.Id,
+                    a.Titulo,
+                    a.FechaLanzamiento,
+                    a.ArtistaId,
+                    ArtistaNombre = a.Artista.NombreArtistico,  
+                   
+                })
+                .ToListAsync();
+
+            return Ok(albumes);
+        }
 
         // DELETE: api/Albumes/{id}
         [HttpDelete("{id:guid}")]

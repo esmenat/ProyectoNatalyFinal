@@ -53,15 +53,15 @@
             <div class="p-4">
                 <h2 class="text-xl fw-bold mb-3">Tus Álbumes</h2>
                 <div class="row g-4 mt-3">
-                    <!-- Álbum card -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="bg-gray-800 rounded-xl p-3 hover:bg-gray-700 transition">
-                            <img src="/img/album1.jpg" class="w-100 rounded mb-2" alt="Álbum 1">
-                            <h5 class="fw-bold mb-1">Mi Álbum</h5>
-                            <p class="text-sm text-gray-400 mb-0">Álbum favorito para escuchar en cualquier momento</p>
+                    @foreach (var album in Model.Albumes.Select((value, index) => new { value, index }))
+                    {
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="bg-gray-800 rounded-xl p-3 hover:bg-gray-700 transition">
+                                <img src="@Model.AlbumImagenes[album.index]" class="w-100 rounded mb-2" alt="@album.value.Titulo">
+                                <h5 class="fw-bold mb-1">@album.value.Titulo</h5>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Puedes duplicar más tarjetas aquí -->
+                    }
                 </div>
             </div>
         </div>
