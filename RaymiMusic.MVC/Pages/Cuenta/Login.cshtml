@@ -20,7 +20,8 @@
                     </div>
                 }
 
-                <form method="post">
+                <!-- Formulario para iniciar sesión -->
+                <form method="post" id="loginForm">
                     <div class="mb-3">
                         <label for="Correo" class="form-label">
                             <i class="bi bi-envelope-fill me-1"></i>Email
@@ -36,12 +37,10 @@
                     </div>
 
                     <div class="d-grid">
-                        <a href="/ClienteVistas/InicioVista" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
-                        </a>
+                        </button>
                     </div>
-
-
                 </form>
 
                 <div class="text-center mt-3">
@@ -51,3 +50,20 @@
         </div>
     </div>
 </div>
+
+<script>
+   
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+
+    
+        const rol = '@HttpContext.Session.GetString("Rol")';  
+
+        
+        if (rol === "Admin") {
+            window.location.href = "/Usuarios/Index";  
+        } else {
+            window.location.href = "/ClienteVistas/InicioVista"; 
+        }
+    });
+</script>

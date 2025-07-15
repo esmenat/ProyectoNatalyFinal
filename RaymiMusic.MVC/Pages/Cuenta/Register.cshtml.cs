@@ -22,7 +22,10 @@ namespace RaymiMusic.MVC.Pages.Cuenta
         public string Contrasena { get; set; } = null!;
 
         [BindProperty]
-        public string TipoCuenta { get; set; } = "Usuario";  // "Usuario" o "Artista"
+        public string TipoCuenta { get; set; }  // "Usuario" o "Artista"
+
+        [BindProperty]
+        public string Rol { get; set; }  // "Admin" o "Client"
 
         public string? ErrorMensaje { get; set; }
 
@@ -34,14 +37,17 @@ namespace RaymiMusic.MVC.Pages.Cuenta
                 return Page();
             }
 
-            string rol = TipoCuenta == "Artista" ? "Artista" : "Free";
+  
+            string rolAsignado = Rol;
+
+            string tipoCuenta = TipoCuenta == "Artista" ? "Artista" : "Free";
 
             var nuevoUsuario = new Usuario
             {
                 Id = Guid.NewGuid(),
                 Correo = Correo,
                 HashContrasena = BCrypt.Net.BCrypt.HashPassword(Contrasena),
-                Rol = rol,
+                Rol = rolAsignado,  // Aquí se asigna el rol seleccionado
                 PlanSuscripcionId = await _context.Planes
                     .Where(p => p.Nombre == "Free")
                     .Select(p => p.Id)
@@ -50,7 +56,7 @@ namespace RaymiMusic.MVC.Pages.Cuenta
 
             _context.Usuarios.Add(nuevoUsuario);
 
-            if (rol == "Artista")
+            if (tipoCuenta == "Artista")
             {
                 _context.Artistas.Add(new Artista
                 {

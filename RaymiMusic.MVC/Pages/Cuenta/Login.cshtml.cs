@@ -28,7 +28,6 @@ namespace RaymiMusic.MVC.Pages.Cuenta
         public string? ErrorMensaje { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
-            // Crear el objeto LoginRequest con los valores de Correo y Contraseña
             var loginRequest = new LoginRequest
             {
                 Correo = Correo,
@@ -37,23 +36,26 @@ namespace RaymiMusic.MVC.Pages.Cuenta
 
             try
             {
-                // Llamada al servicio de login
                 var loginResponse = await _cuentaService.Login(loginRequest);
 
-                // Si el login es exitoso, guardamos los valores en la sesión
-                HttpContext.Session.SetString("UsuarioId", loginResponse.UsuarioId.ToString());
-                HttpContext.Session.SetString("Correo", loginResponse.Correo);
-                HttpContext.Session.SetString("Rol", loginResponse.Rol);
+                HttpContext.Session.SetString("Rol", loginResponse.Rol); 
 
-                // Redirigimos al usuario a la página de inicio
-                return RedirectToPage("/Index");
+           
+                if (loginResponse.Rol == "Admin")
+                {
+                    return RedirectToPage("/Usuarios/Index");
+                }
+                else
+                {
+                    return RedirectToPage("/ClienteVistas/InicioVista");
+                }
             }
             catch (ApplicationException ex)
             {
-                // Si ocurre un error, se muestra el mensaje de error
                 ErrorMensaje = ex.Message;
                 return Page();
             }
         }
+
     }
 }

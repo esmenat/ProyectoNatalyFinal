@@ -23,7 +23,7 @@ namespace RaymiMusic.MVC.Pages.ClienteVistas
 
         public async Task OnGetAsync()
         {
-            var apiUrl = _config["ApiBaseUrl"] + "/listaspublicas"; // URL de la API para obtener listas públicas
+            var apiUrl = _config["ApiBaseUrl"] + "/listaspublicas"; 
 
             var response = await _httpClient.GetAsync(apiUrl);
             if (response.IsSuccessStatusCode)

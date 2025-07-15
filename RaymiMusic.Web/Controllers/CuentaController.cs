@@ -26,19 +26,37 @@ namespace RaymiMusic.Api.Controllers
         public IActionResult Login([FromBody] LoginRequest request)
         {
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Correo == request.Correo);
+
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.HashContrasena))
             {
                 return Unauthorized("Correo o contraseña incorrectos.");
             }
-            // Aquí podrías generar un token JWT o establecer una sesión
-           var loginResponse = new LoginResponse
-           {
-               UsuarioId = usuario.Id,
-               Correo = usuario.Correo,
-               Rol = usuario.Rol
-           };
-            return Ok(loginResponse);
+
+    
+            var loginResponse = new LoginResponse
+            {
+                UsuarioId = usuario.Id,
+                Correo = usuario.Correo,
+                Rol = usuario.Rol
+            };
+
+           
+            HttpContext.Session.SetString("UsuarioId", loginResponse.UsuarioId.ToString());
+            HttpContext.Session.SetString("Correo", loginResponse.Correo);
+            HttpContext.Session.SetString("Rol", loginResponse.Rol);
+
+            if (string.Equals(loginResponse.Rol, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+               
+                return RedirectToPage("/Usuarios/Index");
+            }
+            else
+            {
+       
+                return RedirectToPage("/ClienteVistas/InicioVista");
+            }
         }
+
         [HttpPost("solicitar-recuperacion")]
         public async Task<IActionResult> SolicitarRecuperacion([FromBody] RecuperacionRequest request)
         {

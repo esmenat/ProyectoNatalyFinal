@@ -14,7 +14,7 @@ namespace RaymiMusic.Modelos
         public string HashContrasena { get; set; } = null!;
 
         [Required]
-        public string Rol { get; set; } = "Free";  // Free, Premium, Artista, Admin
+        public string Rol { get; set; }  
 
         // FK al plan de suscripción
         [Required]
