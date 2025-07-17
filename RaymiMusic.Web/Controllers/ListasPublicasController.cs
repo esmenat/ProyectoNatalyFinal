@@ -102,23 +102,6 @@ namespace RaymiMusic.Api.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-        // GET: api/ListasPublicas/PorUsuario/{usuario}
-        [HttpGet("PorUsuario/{usuario}")]
-        public async Task<ActionResult<IEnumerable<ListaPublica>>> GetListasPublicasPorUsuario(string usuario)
-        {
-            var listas = await _context.ListasPublicas
-                .Where(lp => lp.CreadaPor == usuario)
-                .Include(lp => lp.CancionesEnListas)
-                    .ThenInclude(cl => cl.Cancion)
-                .ToListAsync();
-
-            if (listas == null || listas.Count == 0)
-            {
-                return NotFound($"No se encontraron listas públicas creadas por el usuario {usuario}.");
-            }
-
-            return Ok(listas);
-        }
 
         // DELETE: api/ListasPublicas/{listaId}/QuitarCancion/{cancionId}
         [HttpDelete("{listaId:guid}/QuitarCancion/{cancionId:guid}")]
@@ -133,5 +116,4 @@ namespace RaymiMusic.Api.Controllers
             return NoContent();
         }
     }
-
 }

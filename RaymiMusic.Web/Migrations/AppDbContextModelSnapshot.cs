@@ -229,23 +229,6 @@ namespace RaymiMusic.Api.Migrations
                     b.ToTable("Planes");
                 });
 
-            modelBuilder.Entity("RaymiMusic.Modelos.Recuperaciones", b =>
-                {
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Expiracion")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UsuarioId");
-
-                    b.ToTable("Recuperaciones");
-                });
-
             modelBuilder.Entity("RaymiMusic.Modelos.Usuario", b =>
                 {
                     b.Property<Guid>("Id")
@@ -349,17 +332,6 @@ namespace RaymiMusic.Api.Migrations
                     b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
                         .WithOne("Perfil")
                         .HasForeignKey("RaymiMusic.Modelos.Perfil", "UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("RaymiMusic.Modelos.Recuperaciones", b =>
-                {
-                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

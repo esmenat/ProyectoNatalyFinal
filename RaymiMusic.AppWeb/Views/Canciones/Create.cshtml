@@ -1,0 +1,70 @@
+﻿@model RaymiMusic.Modelos.Cancion
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-center text-success">Upload Song</h1>
+
+<h4 class="text-center text-muted">Add new song details</h4>
+<hr class="my-4" />
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Titulo -->
+            <div class="form-group mb-3">
+                <label asp-for="Titulo" class="control-label font-weight-bold">Song Title</label>
+                <input asp-for="Titulo" class="form-control" placeholder="Enter song title" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <!-- Duración -->
+            <div class="form-group mb-3">
+                <label asp-for="Duracion" class="control-label font-weight-bold">Duration</label>
+                <input asp-for="Duracion" type="time" class="form-control" />
+                <span asp-validation-for="Duracion" class="text-danger"></span>
+            </div>
+
+            <!-- Artista (Dropdown) -->
+            <div class="form-group mb-3">
+                <label asp-for="ArtistaId" class="control-label font-weight-bold">Artist</label>
+                <select asp-for="ArtistaId" class="form-control" asp-items="ViewBag.Artistas">
+                    <option value="">Select Artist</option>
+                </select>
+                <span asp-validation-for="ArtistaId" class="text-danger"></span>
+            </div>
+
+            <!-- Genero (Dropdown) -->
+            <div class="form-group mb-3">
+                <label asp-for="GeneroId" class="control-label font-weight-bold">Genre</label>
+                <select asp-for="GeneroId" class="form-control" asp-items="ViewBag.Generos">
+                    <option value="">Select Genre</option>
+                </select>
+                <span asp-validation-for="GeneroId" class="text-danger"></span>
+            </div>
+
+            <!-- Archivo MP3 -->
+            <div class="form-group mb-3">
+                <label for="archivoMp3" class="font-weight-bold">MP3 File</label>
+                <input type="file" class="form-control" id="archivoMp3" name="archivoMp3" />
+                <span asp-validation-for="RutaArchivo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success btn-lg btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" class="text-success">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
