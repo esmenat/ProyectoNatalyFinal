@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RaymiMusic.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -141,6 +141,33 @@ namespace RaymiMusic.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Follow",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ArtistaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FechaSeguimiento = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Follow", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Follow_Artistas_ArtistaId",
+                        column: x => x.ArtistaId,
+                        principalTable: "Artistas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Follow_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ListasReproduccion",
                 columns: table => new
                 {
@@ -247,6 +274,16 @@ namespace RaymiMusic.Api.Migrations
                 column: "ListaReproduccionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Follow_ArtistaId",
+                table: "Follow",
+                column: "ArtistaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Follow_UsuarioId",
+                table: "Follow",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ListasReproduccion_UsuarioId",
                 table: "ListasReproduccion",
                 column: "UsuarioId");
@@ -262,6 +299,9 @@ namespace RaymiMusic.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CancionesEnListas");
+
+            migrationBuilder.DropTable(
+                name: "Follow");
 
             migrationBuilder.DropTable(
                 name: "Perfiles");

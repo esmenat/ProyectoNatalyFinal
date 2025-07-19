@@ -12,8 +12,8 @@ using RaymiMusic.Api.Data;
 namespace RaymiMusic.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250625164916_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250719034903_InicialCreate")]
+    partial class InicialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,6 +133,32 @@ namespace RaymiMusic.Api.Migrations
                     b.HasIndex("ListaReproduccionId");
 
                     b.ToTable("CancionesEnListas");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.Follow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("ArtistaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FechaSeguimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Follow");
                 });
 
             modelBuilder.Entity("RaymiMusic.Modelos.Genero", b =>
@@ -317,6 +343,25 @@ namespace RaymiMusic.Api.Migrations
                     b.Navigation("Cancion");
 
                     b.Navigation("ListaReproduccion");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.Follow", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.Artista", "Artista")
+                        .WithMany()
+                        .HasForeignKey("ArtistaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artista");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("RaymiMusic.Modelos.ListaReproduccion", b =>

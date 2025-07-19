@@ -1,0 +1,59 @@
+﻿@model Artista
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<!-- Foto de Portada -->
+<div class="cover-photo" style="background-image: url('@Model.UrlFotoPortada');">
+</div>
+
+<!-- Contenedor para las fotos de perfil y el contenido -->
+<div class="profile-container" style="position: relative;">
+    <!-- Foto de perfil -->
+    <div class="profile-photo" style="position: absolute; top: -100px; left: 30px; border-radius: 50%; overflow: hidden; width: 150px; height: 150px; border: 5px solid white;">
+        @if (!string.IsNullOrEmpty(Model.UrlFotoPerfil))
+        {
+            <img src="@Model.UrlFotoPerfil" alt="Foto de Perfil" style="width: 100%; height: 100%; object-fit: cover;" />
+        }
+        else
+        {
+            <p>No hay foto de perfil disponible.</p>
+        }
+    </div>
+
+    <!-- Contenedor principal de información -->
+    <div class="profile-info" style="margin-left: 200px; margin-top: 50px;">
+        <div class="profile-box">
+            <!-- Nombre Artístico -->
+            <div class="mb-3">
+                <label class="form-label profile-label">Nombre Artístico</label>
+                <p class="profile-name">@Model.NombreArtistico</p>
+            </div>
+
+            <!-- Biografía -->
+            <div class="mb-3">
+                <label class="form-label profile-label">Biografía</label>
+                <p class="profile-bio">@Model.Biografia</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Seguir a la derecha de la pantalla -->
+    <div class="follow-btn-container" style="position: absolute; top: -50px; right: 30px;">
+        @if (ViewBag.IsFollowing == true)
+        {
+            <form method="post" asp-action="ToggleFollow" asp-route-idArtista="@Model.Id">
+                <button type="submit" class="btn btn-success">Siguiendo</button>
+            </form>
+        }
+        else
+        {
+            <form method="post" asp-action="ToggleFollow" asp-route-idArtista="@Model.Id">
+                <button type="submit" class="btn btn-primary">Seguir</button>
+            </form>
+        }
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Volver al inicio</a>
