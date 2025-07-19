@@ -22,6 +22,13 @@ builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(
         builder.Configuration.GetConnectionString("RaymiMusicDb")));
 
+builder.Services.AddHttpClient<IArtistService, ArtistService>(client =>
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]));
+
+builder.Services.AddHttpClient<ISongService, SongService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
+});
 // Autenticación por cookies
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

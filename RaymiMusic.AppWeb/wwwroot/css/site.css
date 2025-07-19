@@ -20,3 +20,170 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Estilo para la foto de portada */
+.cover-photo {
+    background-size: cover;
+    background-position: center;
+    height: 350px; /* Mantener la altura de la foto de portada */
+    width: 100%;
+    border-bottom: 5px solid white; /* Un borde sutil debajo de la foto de portada */
+}
+
+/* Contenedor para el perfil */
+.profile-container {
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+    position: relative;
+    font-family: 'Arial', sans-serif; /* Establecer una fuente moderna para todo el contenido */
+}
+
+/* Foto de perfil circular en la esquina superior */
+.profile-photo {
+    position: absolute;
+    top: -100px; /* Subir la foto de perfil */
+    left: 30px; /* Ajustar la distancia de la izquierda */
+    border-radius: 50%;
+    overflow: hidden;
+    width: 150px; /* Mantener el tamaño del círculo */
+    height: 150px; /* Mantener el tamaño del círculo */
+    border: 5px solid white; /* Borde blanco alrededor de la foto */
+}
+
+    .profile-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Estilo para la información del perfil */
+.profile-info {
+    margin-left: 200px;
+    margin-top: 50px;
+    font-size: 16px; /* Tamaño de letra adecuado */
+    line-height: 1.5; /* Espaciado entre las líneas para mayor claridad */
+}
+
+/* Mejorar presentación del nombre artístico */
+.profile-name {
+    font-size: 28px; /* Tamaño de fuente más grande para el nombre artístico */
+    font-weight: bold;
+    color: #333333; /* Color oscuro y elegante */
+    margin-top: 0; /* Alineación adecuada */
+}
+
+/* Mejorar presentación de la biografía */
+.profile-bio {
+    font-size: 18px; /* Tamaño de fuente cómodo para leer */
+    color: #666666; /* Un color gris claro para la biografía */
+    margin-top: 10px; /* Espacio entre el nombre y la biografía */
+    font-style: italic; /* Italic para darle un toque diferente */
+}
+
+/* Botón de "Volver al inicio" */
+.btn-secondary {
+    margin-top: 20px;
+    padding: 10px 20px; /* Aumentar tamaño del botón para mejor visibilidad */
+    font-size: 16px; /* Tamaño de fuente adecuado */
+    background-color: #4CAF50; /* Color de fondo verde */
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+    .btn-secondary:hover {
+        background-color: #45a049; /* Color más oscuro al pasar el mouse */
+    }
+/* Estilo para el contenedor del botón Seguir */
+.follow-btn-container {
+    position: absolute; /* Posiciona el botón respecto al contenedor principal */
+    top: -50px; /* Alinea el botón verticalmente con la foto de perfil */
+    right: 30px; /* Mueve el botón hacia la derecha de la pantalla */
+}
+
+/* Estilo para el botón Seguir */
+.btn-follow {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Color de fondo azul */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer;
+    font-weight: bold; /* Hacer que el texto sea negrita */
+}
+
+    .btn-follow:hover {
+        background-color: #0056b3; /* Cambio de color al pasar el ratón */
+    }
+
+.carousel-inner {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.custom-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+}
+
+.carousel-control-prev.custom-arrow {
+    left: -3rem;
+}
+
+.carousel-control-next.custom-arrow {
+    right: -3rem;
+}
+
+.black-arrow {
+    filter: invert(1); /* hace que la flecha se vea negra */
+}
+/* Flechas modernas: glassmorphism + sombra */
+.custom-arrow-left,
+.custom-arrow-right {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+    .custom-arrow-left:hover,
+    .custom-arrow-right:hover {
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(1.05);
+    }
+
+/* Posicionamiento lateral */
+.custom-arrow-left {
+    margin-left: -3.5rem;
+}
+
+.custom-arrow-right {
+    margin-right: -3.5rem;
+}
+
+/* Iconos negros y más grandes */
+.black-arrow {
+    filter: invert(1);
+    width: 24px;
+    height: 24px;
+}
