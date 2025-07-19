@@ -12,7 +12,7 @@ namespace RaymiMusic.Api.Controllers
     [Route("api/[controller]")]
     public class AlbumesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context; 
 
         public AlbumesController(AppDbContext context)
         {
