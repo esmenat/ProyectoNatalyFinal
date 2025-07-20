@@ -5,6 +5,7 @@
 }
 
 <h1>¡Hola, @User.Identity.Name!</h1>
+
 <form method="get" asp-action="Index" class="mb-4">
     <div class="input-group">
         <input type="text" name="q" value="@Model.Query" class="form-control"
@@ -12,59 +13,7 @@
         <button class="btn btn-primary">Buscar</button>
     </div>
 </form>
-<h2 class="mb-3">Artistas Destacados</h2>
-<div class="position-relative d-flex align-items-center justify-content-between mb-5">
-    <!-- Flecha izquierda fuera -->
-    <button class="custom-arrow-left" type="button" data-bs-target="#carouselArtistas" data-bs-slide="prev" aria-label="Anterior">
-        <span class="carousel-control-prev-icon black-arrow" aria-hidden="true"></span>
-    </button>
 
-
-    <!-- Carrusel en el centro -->
-    <div id="carouselArtistas" class="carousel slide flex-grow-1 px-4" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @{
-                int total = Model.Artistas.Count();
-                int itemsPerSlide = 3;
-                int index = 0;
-
-                while (index < total)
-                {
-                    string isActive = index == 0 ? "active" : "";
-                    <div class="carousel-item @isActive">
-                        <div class="d-flex justify-content-center gap-3 flex-wrap">
-                            @foreach (var artista in Model.Artistas.Skip(index).Take(itemsPerSlide))
-                            {
-                                <div class="card text-center" style="width: 16rem;">
-                                    <img src="@artista.UrlFotoPerfil" class="card-img-top" alt="Foto de @artista.NombreArtistico">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@artista.NombreArtistico</h5>
-                                        <p class="card-text">
-                                            @(string.IsNullOrEmpty(artista.Biografia) ? "Sin biografía" :
-                                            artista.Biografia.Length > 100
-                                            ? artista.Biografia.Substring(0, 100) + "..."
-                                            : artista.Biografia)
-                                        </p>
-                                        <a href="@Url.Action("Index", "PublicPerfilArtista", new { id = artista.Id })" class="btn btn-outline-primary">
-                                            Ver perfil
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    index += itemsPerSlide;
-                }
-            }
-        </div>
-    </div>
-
-    <!-- Flecha derecha fuera -->
-    <button class="custom-arrow-right" type="button" data-bs-target="#carouselArtistas" data-bs-slide="next">
-        <span class="carousel-control-next-icon black-arrow" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-    </button>
-</div>
 @if (!Model.Songs.Any())
 {
     <p>No se encontraron canciones.</p>
@@ -90,7 +39,7 @@ else
                     <td>@s.ArtistaNombre</td>
                     <td>@s.Duracion.ToString(@"mm\:ss")</td>
                     <td>
-
+          
                         <a asp-controller="Player" asp-action="Play" asp-route-id="@s.Id"
                            class="btn btn-sm btn-primary">
                             ▶︎ Reproducir
@@ -102,3 +51,10 @@ else
         </tbody>
     </table>
 }
+
+<hr />
+<h2>Mis Playlists</h2>
+<p>
+    <a asp-controller="Playlists" asp-action="Index" class="btn btn-success">Ver mis playlists</a>
+    <a asp-controller="Playlists" asp-action="Create" class="btn btn-outline-success">Crear nueva playlist</a>
+</p>

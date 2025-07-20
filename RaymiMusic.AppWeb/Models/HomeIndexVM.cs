@@ -6,8 +6,6 @@ namespace RaymiMusic.AppWeb.Models
     public class HomeIndexVM
     {
         public string Query { get; set; }
-        public IEnumerable<Artista> Artistas { get; set; } = new List<Artista>();
-
         public IEnumerable<SongDTO> Songs { get; set; }
     }
 }
