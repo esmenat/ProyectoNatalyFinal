@@ -1,0 +1,63 @@
+﻿@model RaymiMusic.Modelos.Usuario
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Perfil de Usuario";
+    Layout = "_Layout";
+}
+
+<div class="cover-photo" style="background-image: url('/media/portada-user.jpg');"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="profile-box p-5">
+
+                <h3 class="fw-bold mb-4">Mi Perfil</h3>
+
+                <form asp-action="Edit" asp-controller="Users" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Correo" class="form-label">Correo electrónico</label>
+                        <input asp-for="Correo" class="form-control" readonly
+                               style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="HashContrasena" class="form-label">Contraseña (hash)</label>
+                        <input asp-for="HashContrasena" class="form-control"
+                               type="password"
+                               style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Rol" class="form-label">Rol</label>
+                        <input asp-for="Rol" class="form-control" readonly
+                               style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;" />
+                    </div>
+
+
+
+                    <div class="mb-4">
+                        <label asp-for="PlanSuscripcionId" class="form-label">Plan de Suscripción</label>
+                        <select asp-for="PlanSuscripcionId"
+                                class="form-select"
+                                asp-items="@(ViewData["Planes"] as SelectList)"
+                                style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;">
+                            <option value="">-- seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success px-4">Guardar</button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

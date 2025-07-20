@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RaymiMusic.Api.Data;
-using RaymiMusic.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

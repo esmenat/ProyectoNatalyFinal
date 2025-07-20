@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaymiMusic.Api.Data;
 using RaymiMusic.Modelos;
@@ -13,6 +14,38 @@ namespace RaymiMusic.AppWeb.Controllers
         // GET: /Artistas
         public async Task<IActionResult> Index()
             => View(await _ctx.Artistas.AsNoTracking().ToListAsync());
+        public async Task<IActionResult> Perfil()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return NotFound();
+            }
+
+            // Incluir relaciones para poder contar álbumes y canciones
+            var artista = await _ctx.Artistas
+                .Include(a => a.Albumes)
+                .Include(a => a.Canciones)
+                .FirstOrDefaultAsync(a => a.Id == Guid.Parse(userId));
+
+            if (artista == null)
+            {
+                return NotFound();
+            }
+
+            // Contar las canciones y álbumes sin modificar el modelo
+            ViewBag.CantidadAlbumes = artista.Albumes.Count;
+            ViewBag.CantidadCanciones = artista.Canciones.Count;
+
+            return View(artista);
+        }
+
 
         // GET: /Artistas/Details/{id}
         public async Task<IActionResult> Details(Guid id)

@@ -28,4 +28,8 @@
     <ProjectReference Include="..\RaymiMusic.Web\RaymiMusic.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\NewFolder\" />
+  </ItemGroup>
+
 </Project>

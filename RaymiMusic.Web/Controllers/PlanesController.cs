@@ -28,6 +28,7 @@ namespace RaymiMusic.Api.Controllers
                                  .ToListAsync();
         }
 
+
         // GET: api/Planes/{id}
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PlanSuscripcion>> GetPlan(Guid id)
@@ -39,6 +40,29 @@ namespace RaymiMusic.Api.Controllers
             if (plan == null) return NotFound();
             return plan;
         }
+        // GET: api/Planes/{id}
+        [HttpGet("Nombre/{nombrePlan}")]
+        public async Task<ActionResult<PlanSuscripcion>> GetPlanByNombre(string nombrePlan)
+        {
+            var plan = await _context.Planes
+                                     .FirstOrDefaultAsync(p => p.Nombre == nombrePlan);
+
+            if (plan == null) return NotFound();
+            return plan;
+        }
+        [HttpGet("User/{userId:guid}")]
+        public async Task<ActionResult<PlanSuscripcion>> GetPlanByUser(Guid userId)
+        {
+            var plan = await _context.Planes
+                                     .Include(p => p.Usuarios)
+                                     .SingleOrDefaultAsync(p => p.Usuarios.Any(u => u.Id == userId));
+
+            if (plan == null)
+                return NotFound("El usuario no tiene un plan de suscripción.");
+
+            return Ok(plan);
+        }
+
 
         // POST: api/Planes
         [HttpPost]
@@ -72,7 +96,18 @@ namespace RaymiMusic.Api.Controllers
 
             return NoContent();
         }
+        [HttpPost("Asignar/{userId:Guid}/{nombrePlan}")]
+        public async Task AsignarPlan(Guid userId, string nombrePlan)
+        {
+            var plan = await _context.Planes
+                                     .FirstOrDefaultAsync(p => p.Nombre == nombrePlan);
+            if (plan == null) throw new Exception("Plan no encontrado");
+            var usuario = await _context.Usuarios.FindAsync(userId);
+            if (usuario == null) throw new Exception("Usuario no encontrado");
+            usuario.PlanSuscripcion = plan;
+            await _context.SaveChangesAsync();
 
+        }
         // DELETE: api/Planes/{id}
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeletePlan(Guid id)

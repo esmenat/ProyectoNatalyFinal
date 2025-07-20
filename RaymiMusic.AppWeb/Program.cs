@@ -10,14 +10,21 @@ using RaymiMusic.AppWeb;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
+using RaymiMusic.Api.Consumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Crud<Follow>.EndPoint = builder.Configuration.GetConnectionString("RaymiMusicDb") ?? "";
 /* ---------- Services ---------- */
 builder.Services.AddHttpClient<ISongService, SongService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
 });
+builder.Services.AddHttpClient<IFollowService, FollowService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
+});
+
 
 builder.Services.AddHttpClient<IPlaylistService, PlaylistService>(client =>
 {
@@ -25,6 +32,9 @@ builder.Services.AddHttpClient<IPlaylistService, PlaylistService>(client =>
 });
 
 builder.Services.AddHttpClient<IArtistService, ArtistService>(client =>
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]));
+
+builder.Services.AddHttpClient<IPlanesService, PlanesService>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]));
 
 

@@ -13,27 +13,32 @@ namespace RaymiMusic.AppWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISongService _songService;
+        private readonly IArtistService _artistService;
 
         public HomeController(
             ILogger<HomeController> logger,
-            ISongService songService)
+            ISongService songService,
+            IArtistService artistService)
         {
             _logger = logger;
             _songService = songService;
+            _artistService = artistService;
         }
 
-        // GET: /Home/Index?q=texto
+
         public async Task<IActionResult> Index(string q)
         {
-            // Si q está vacío, traemos todas; si no, filtramos
-            var lista = string.IsNullOrWhiteSpace(q)
+            var canciones = string.IsNullOrWhiteSpace(q)
                 ? await _songService.GetAllAsync()
                 : await _songService.SearchAsync(q);
+
+            var artistas = await _artistService.GetAllArtistasSearchAsync(q);
 
             var vm = new HomeIndexVM
             {
                 Query = q,
-                Songs = lista
+                Songs = canciones,
+                Artistas = artistas
             };
             return View(vm);
         }

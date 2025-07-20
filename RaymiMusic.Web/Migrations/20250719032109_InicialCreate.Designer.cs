@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaymiMusic.Api.Data;
 
@@ -11,9 +12,11 @@ using RaymiMusic.Api.Data;
 namespace RaymiMusic.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250719032109_InicialCreate")]
+    partial class InicialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,52 +248,6 @@ namespace RaymiMusic.Api.Migrations
                     b.ToTable("ListasReproduccion");
                 });
 
-            modelBuilder.Entity("RaymiMusic.Modelos.Pago", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CodigoSeguridad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaExpiracion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaPago")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Monto")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("NombreTitular")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumeroDeTarjeta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PlanSuscripcionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlanSuscripcionId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Pago");
-                });
-
             modelBuilder.Entity("RaymiMusic.Modelos.Perfil", b =>
                 {
                     b.Property<Guid>("UsuarioId")
@@ -444,25 +401,6 @@ namespace RaymiMusic.Api.Migrations
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("RaymiMusic.Modelos.Pago", b =>
-                {
-                    b.HasOne("RaymiMusic.Modelos.PlanSuscripcion", "PlanSuscripcion")
-                        .WithMany()
-                        .HasForeignKey("PlanSuscripcionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PlanSuscripcion");
 
                     b.Navigation("Usuario");
                 });

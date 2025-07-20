@@ -280,6 +280,8 @@ namespace RaymiMusic.AppWeb.Controllers
                 Biografia = vm.Biografia,
                 UrlFotoPerfil = vm.UrlFotoPerfil,
                 UrlFotoPortada = vm.UrlFotoPortada
+
+                
             };
 
             _ctx.Artistas.Add(artista);

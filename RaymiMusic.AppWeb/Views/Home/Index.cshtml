@@ -4,8 +4,9 @@
     ViewData["Title"] = "Inicio";
 }
 
-<h1>¡Hola, @User.Identity.Name!</h1>
+<h1>RaymiMusic</h1>
 
+<!-- Formulario de búsqueda -->
 <form method="get" asp-action="Index" class="mb-4">
     <div class="input-group">
         <input type="text" name="q" value="@Model.Query" class="form-control"
@@ -14,9 +15,68 @@
     </div>
 </form>
 
+<!-- Solo mostrar sección de artistas si hay -->
+@if (Model.Artistas != null && Model.Artistas.Any())
+{
+    <h2 class="mb-3">Artistas Destacados</h2>
+    <div id="carouselArtistas" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @{
+                int total = Model.Artistas.Count();
+                int itemsPerSlide = 3;
+                int index = 0;
+
+                while (index < total)
+                {
+                    string isActive = index == 0 ? "active" : "";
+                    <div class="carousel-item @isActive">
+                        <div class="d-flex justify-content-center gap-4 py-3 flex-wrap">
+                            @foreach (var artista in Model.Artistas.Skip(index).Take(itemsPerSlide))
+                            {
+                                <div class="card text-center profile-box" style="width: 16rem;">
+                                    <img src="@artista.UrlFotoPerfil" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Foto de @artista.NombreArtistico">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@artista.NombreArtistico</h5>
+                                        <p class="card-text text-light small">
+                                            @(string.IsNullOrEmpty(artista.Biografia)
+                                            ? "Sin biografía"
+                                            : artista.Biografia.Length > 100
+                                            ? artista.Biografia.Substring(0, 100) + "..."
+                                            : artista.Biografia)
+                                        </p>
+                                        <a href="@Url.Action("Index", "PublicPerfilArtista", new { id = artista.Id })"
+                                           class="btn btn-outline-success btn-sm">
+                                            Ver perfil
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    index += itemsPerSlide;
+                }
+            }
+        </div>
+
+        @* Mostrar flechas solo si hay más de 3 artistas *@
+        @if (Model.Artistas.Count() > 3)
+        {
+            <button class="carousel-control-prev custom-arrow-left" type="button" data-bs-target="#carouselArtistas" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon black-arrow" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next custom-arrow-right" type="button" data-bs-target="#carouselArtistas" data-bs-slide="next">
+                <span class="carousel-control-next-icon black-arrow" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        }
+    </div>
+}
+
+<!-- Canciones -->
 @if (!Model.Songs.Any())
 {
-    <p>No se encontraron canciones.</p>
+    <p class="text-muted">No se encontraron canciones.</p>
 }
 else
 {
@@ -39,12 +99,10 @@ else
                     <td>@s.ArtistaNombre</td>
                     <td>@s.Duracion.ToString(@"mm\:ss")</td>
                     <td>
-          
                         <a asp-controller="Player" asp-action="Play" asp-route-id="@s.Id"
                            class="btn btn-sm btn-primary">
                             ▶︎ Reproducir
                         </a>
-
                     </td>
                 </tr>
             }
@@ -53,6 +111,8 @@ else
 }
 
 <hr />
+
+<!-- Playlists -->
 <h2>Mis Playlists</h2>
 <p>
     <a asp-controller="Playlists" asp-action="Index" class="btn btn-success">Ver mis playlists</a>

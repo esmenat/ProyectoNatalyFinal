@@ -70,5 +70,21 @@ namespace RaymiMusic.AppWeb.Services
                     })
             };
         }
+        public async Task<Artista> GetArtistaAsync(Guid id)
+        {
+            var artista = await _http.GetFromJsonAsync<Artista>($"api/Artistas/{id}");
+            return artista ?? throw new Exception("Artista no encontrado");
+        }
+
+        public async Task<IEnumerable<Artista>> GetAllArtistasSearchAsync(string? query)
+        {
+            string url = string.IsNullOrWhiteSpace(query)
+                ? "api/Artistas/search"
+                : $"api/Artistas/search?query={Uri.EscapeDataString(query)}";
+
+            var artistas = await _http.GetFromJsonAsync<Artista[]>(url);
+            return artistas ?? Array.Empty<Artista>();
+        }
+
     }
 }
