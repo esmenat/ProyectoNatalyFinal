@@ -67,32 +67,7 @@ namespace RaymiMusic.AppWeb.Controllers
             ViewData["Planes"] = new SelectList(_ctx.Planes, "Id", "Nombre", user.PlanSuscripcionId);
             return View(user);
         }
-        public async Task<IActionResult> Perfil()
-        {
-            if (!User.Identity.IsAuthenticated) // Verificar si el usuario está autenticado
-            {
-                return RedirectToAction("Login", "Account"); // Redirigir al login si no está autenticado
-            }
-
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == null)
-            {
-                return NotFound(); // Si no se encuentra el userId, devolver un 404
-            }
-
-            // Buscar el usuario correspondiente al userId
-            var usuario = await _ctx.Usuarios
-                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId)); // Asumiendo que 'userId' es el ID del usuario
-
-            if (usuario == null)
-            {
-                return NotFound(); // Si no se encuentra el usuario, devolver un 404
-            }
-
-            return View("PerfilUsuario", usuario); // Pasar el usuario a la vista correcta
-        }
-
+       
         // POST: /Users/Edit/{id}
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(

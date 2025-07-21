@@ -4,14 +4,19 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+
 
 @if (ViewBag.PlanSeleccionado != null)
 {
-    <div class="alert alert-info">
-        <strong>Has elegido el plan:</strong> @ViewBag.PlanSeleccionado
+    <div class="my-4 p-3 rounded-3" style="background-color: #181818; color: white; border-left: 5px solid #1DB954;">
+        <h5 class="mb-1">Plan seleccionado</h5>
+        <p class="mb-0" style="font-size: 1.1rem;">
+            <i class="bi bi-patch-check-fill text-success me-1"></i> @ViewBag.PlanSeleccionado
+        </p>
     </div>
 }
+
+
 <h4>Pago</h4>
 <hr />
 <div class="row">

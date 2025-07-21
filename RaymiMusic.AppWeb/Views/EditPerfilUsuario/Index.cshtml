@@ -1,8 +1,6 @@
-﻿@model RaymiMusic.Modelos.Usuario
-@using Microsoft.AspNetCore.Mvc.Rendering
-
+﻿@model RaymiMusic.Modelos.ViewModels.UsuarioPerfilVM
 @{
-    ViewData["Title"] = "Perfil de Usuario";
+    ViewData["Title"] = "Mi Perfil";
     Layout = "_Layout";
 }
 
@@ -15,7 +13,7 @@
 
                 <h3 class="fw-bold mb-4">Mi Perfil</h3>
 
-                <form asp-action="Edit" asp-controller="Users" method="post">
+                <form asp-action="Edit" asp-controller="EditPerfilUsuario" method="post">
                     <input type="hidden" asp-for="Id" />
 
                     <div asp-validation-summary="All" class="text-danger mb-3"></div>
@@ -27,28 +25,11 @@
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="HashContrasena" class="form-label">Contraseña (hash)</label>
+                        <label asp-for="HashContrasena" class="form-label">Nueva Contraseña</label>
                         <input asp-for="HashContrasena" class="form-control"
                                type="password"
+                               placeholder="Dejar en blanco para no cambiar"
                                style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;" />
-                    </div>
-
-                    <div class="mb-4">
-                        <label asp-for="Rol" class="form-label">Rol</label>
-                        <input asp-for="Rol" class="form-control" readonly
-                               style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;" />
-                    </div>
-
-
-
-                    <div class="mb-4">
-                        <label asp-for="PlanSuscripcionId" class="form-label">Plan de Suscripción</label>
-                        <select asp-for="PlanSuscripcionId"
-                                class="form-select"
-                                asp-items="@(ViewData["Planes"] as SelectList)"
-                                style="background-color: #121212 !important; color: white !important; border: 1px solid #333 !important;">
-                            <option value="">-- seleccionar --</option>
-                        </select>
                     </div>
 
                     <div class="d-flex justify-content-between">

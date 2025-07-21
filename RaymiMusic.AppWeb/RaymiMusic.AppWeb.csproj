@@ -24,12 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RaymiMusic.Api.Consumer\RaymiMusic.Api.Consumer.csproj" />
+    <ProjectReference Include="..\RaymiMusic.Api\RaymiMusic.Api.csproj" />
     <ProjectReference Include="..\RaymiMusic.Modelos\RaymiMusic.Modelos.csproj" />
-    <ProjectReference Include="..\RaymiMusic.Web\RaymiMusic.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\NewFolder\" />
   </ItemGroup>
 
 </Project>
