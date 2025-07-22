@@ -15,7 +15,7 @@
             @foreach (var pl in Model.Playlists)
             {
                 <option value="@pl.Id">
-                    @pl.Nombre (@pl.CancionesCount)
+                    @pl.Nombre (@(pl.CancionesEnListas != null ? pl.CancionesEnListas.Count : 0))
                 </option>
             }
         </select>

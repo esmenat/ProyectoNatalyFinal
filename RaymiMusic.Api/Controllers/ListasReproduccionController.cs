@@ -29,7 +29,26 @@ namespace RaymiMusic.Api.Controllers
                     .ThenInclude(cl => cl.Cancion)
                 .ToListAsync();
         }
-
+        [HttpGet("publicas")]
+        public async Task<ActionResult<IEnumerable<ListaReproduccion>>> GetListasPublicas()
+        {
+            return await _context.ListasReproduccion
+                .Where(l => l.EsPublica)
+                .Include(l => l.Usuario)
+                .Include(l => l.CancionesEnListas)
+                    .ThenInclude(cl => cl.Cancion)
+                .ToListAsync();
+        }
+        [HttpGet("usuario/{userId:guid}")]
+        public async Task<ActionResult<IEnumerable<ListaReproduccion>>> GetListasUsuario(Guid userId)
+        {
+            return await _context.ListasReproduccion
+                .Where(l => l.UsuarioId == userId)
+                .Include(l => l.Usuario)
+                .Include(l => l.CancionesEnListas)
+                    .ThenInclude(cl => cl.Cancion)
+                .ToListAsync();
+        }
         // GET: api/ListasReproduccion/{id}
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ListaReproduccion>> GetLista(Guid id)
@@ -106,8 +125,8 @@ namespace RaymiMusic.Api.Controllers
         }
 
         // DELETE: api/ListasReproduccion/{listaId}/QuitarCancion/{cancionId}
-        [HttpDelete("{listaId:guid}/QuitarCancion/{cancionId:guid}")]
-        public async Task<IActionResult> QuitarCancion(Guid listaId, Guid cancionId)
+        [HttpDelete("{listaId:guid}/RemoveSong/{cancionId:guid}")]
+        public async Task<IActionResult> RemoveSong(Guid listaId, Guid cancionId)
         {
             var enlace = await _context.CancionesEnListas
                 .FirstOrDefaultAsync(cl => cl.ListaReproduccionId == listaId && cl.CancionId == cancionId);

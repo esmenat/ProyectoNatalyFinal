@@ -37,6 +37,20 @@ public class PlaylistService : IPlaylistService
             })
         };
     }
+    public async Task<IEnumerable<ListaReproduccion>> GetListasUsuario(Guid userId)
+    {
+        // GET /api/ListasReproduccion/Usuario/{usuarioId}
+        return await _http
+            .GetFromJsonAsync<IEnumerable<ListaReproduccion>>($"api/ListasReproduccion/Usuario/{userId}")
+            ?? Array.Empty<ListaReproduccion>();
+    }
+    public async Task<IEnumerable<ListaReproduccion>> GetPublicPlaylistsAsync()
+    {
+        // GET /api/ListasReproduccion/Publicas
+        return await _http
+            .GetFromJsonAsync<IEnumerable<ListaReproduccion>>("api/ListasReproduccion/Publicas")
+            ?? Array.Empty<ListaReproduccion>();
+    }
 
     public async Task CreateAsync(CreatePlaylistVM vm)
     {
@@ -50,6 +64,7 @@ public class PlaylistService : IPlaylistService
     }
 
 
+
     public async Task AddSongAsync(Guid playlistId, Guid songId)
     {
         // POST /api/ListasReproduccion/{listaId}/AgregarCancion/{cancionId}
@@ -60,4 +75,13 @@ public class PlaylistService : IPlaylistService
         response.EnsureSuccessStatusCode();
     }
 
+    public async Task RemoveSongAsync(Guid playlistId, Guid songId)
+    {
+        // Delete /api/ListasReproduccion/{listaId}/AgregarCancion/{cancionId}
+        var response = await _http.DeleteAsync(
+            $"api/ListasReproduccion/{playlistId}/RemoveSong/{songId}"
+            
+        );
+        response.EnsureSuccessStatusCode();
+    }
 }

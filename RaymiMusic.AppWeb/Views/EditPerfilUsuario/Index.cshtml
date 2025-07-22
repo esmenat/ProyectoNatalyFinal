@@ -80,7 +80,7 @@
                                          style="width: 35px; height: 35px; object-fit: cover; border: 1px solid #555;" />
                                     <span>@artista.Nombre</span>
                                 </div>
-                                <a href="@Url.Action("PerfilPublico", "Artistas", new { id = artista.Id })" class="btn btn-sm btn-success">Ver</a>
+                                <a href="@Url.Action("Index", "PublicPerfilArtista", new { id = artista.Id })" class="btn btn-sm btn-success">Ver</a>
                             </li>
                         }
                     }

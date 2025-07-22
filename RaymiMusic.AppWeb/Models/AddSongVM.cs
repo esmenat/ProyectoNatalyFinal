@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RaymiMusic.Modelos;
 
 namespace RaymiMusic.AppWeb.Models
 {
@@ -11,8 +12,8 @@ namespace RaymiMusic.AppWeb.Models
         [Required(ErrorMessage = "Seleccione una playlist")]
         public Guid PlaylistId { get; set; }
 
-        public IEnumerable<PlaylistDTO> Playlists { get; set; }
-            = new List<PlaylistDTO>();
+        public IEnumerable<ListaReproduccion> Playlists { get; set; }
+            = new List<ListaReproduccion>();
     }
 
 }
