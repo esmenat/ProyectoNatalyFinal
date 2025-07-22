@@ -14,15 +14,17 @@ namespace RaymiMusic.AppWeb.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ISongService _songService;
         private readonly IArtistService _artistService;
-
+        private readonly IAlbumsService _albumService;
         public HomeController(
             ILogger<HomeController> logger,
             ISongService songService,
-            IArtistService artistService)
+            IArtistService artistService,
+            IAlbumsService albumService)
         {
             _logger = logger;
             _songService = songService;
             _artistService = artistService;
+            _albumService = albumService;
         }
 
 
@@ -33,15 +35,18 @@ namespace RaymiMusic.AppWeb.Controllers
                 : await _songService.SearchAsync(q);
 
             var artistas = await _artistService.GetAllArtistasSearchAsync(q);
+            var albumes = await _albumService.GetAlbumsSearchAsync(q);
 
             var vm = new HomeIndexVM
             {
                 Query = q,
                 Songs = canciones,
-                Artistas = artistas
+                Artistas = artistas,
+                Albums = albumes
             };
             return View(vm);
         }
+
 
         public IActionResult Privacy()
         {

@@ -28,6 +28,23 @@ namespace RaymiMusic.Api.Controllers
                                  .Include(a => a.Canciones)
                                  .ToListAsync();
         }
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Album>>> GetAlbumSearch([FromQuery] string? query)
+        {
+            var albumes = _context.Albumes
+                .Include(a => a.Artista)
+                .Include(a => a.Canciones)
+                .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                albumes = albumes.Where(a =>
+                    a.Titulo.ToLower().Contains(query.ToLower()));
+            }
+            var resultado = await albumes
+                .OrderBy(a => a.Titulo)
+                .ToListAsync();
+            return resultado;
+        }
 
         // GET: api/Albumes/{id}
         [HttpGet("{id:guid}")]

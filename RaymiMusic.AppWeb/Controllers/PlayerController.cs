@@ -15,19 +15,19 @@ namespace RaymiMusic.AppWeb.Controllers
         private readonly IPlanesService _planesService;
         private readonly IWebHostEnvironment _env;
         private readonly IPlaylistService _playlistService;
-
-        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService)
+        private readonly IAlbumsService _albumsService;
+        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService,IAlbumsService albumsService)
         {
             _songService = songService;
             _planesService = planesService;
             _env = env;
             _playlistService = playlistService;
+            _albumsService = albumsService;
         }
 
         // GET: /Player/Play/{id}
 
-        public async Task<IActionResult> Play(Guid id, Guid? playlistId = null, string? returnUrl = null)
-
+        public async Task<IActionResult> Play(Guid id, Guid? playlistId = null, Guid? albumId = null, string? returnUrl = null)
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -54,10 +54,11 @@ namespace RaymiMusic.AppWeb.Controllers
 
             var song = await _songService.GetByIdAsync(id);
             if (song == null) return NotFound();
+
             ViewBag.songId = song.Id;
             ViewBag.PlaylistId = playlistId;
+            ViewBag.AlbumId = albumId;
 
-            // Leer estado de aleatorio
             bool modoAleatorio = HttpContext.Session.GetString("ModoAleatorio") == "true";
             ViewBag.ModoAleatorio = modoAleatorio;
             HttpContext.Session.SetString("CancionActual", id.ToString());
@@ -70,10 +71,32 @@ namespace RaymiMusic.AppWeb.Controllers
 
                 if (modoAleatorio)
                 {
-                    var aleatoria = lista
-                        .Where(c => c.Id != id)
-                        .OrderBy(c => Guid.NewGuid())
-                        .FirstOrDefault();
+                    var aleatoria = lista.Where(c => c.Id != id)
+                                         .OrderBy(c => Guid.NewGuid())
+                                         .FirstOrDefault();
+                    ViewBag.CancionSiguiente = aleatoria?.Id;
+                }
+                else
+                {
+                    var indexActual = lista.FindIndex(c => c.Id == id);
+                    ViewBag.CancionAnterior = indexActual > 0 ? (Guid?)lista[indexActual - 1].Id : null;
+                    ViewBag.CancionSiguiente = indexActual < lista.Count - 1 ? (Guid?)lista[indexActual + 1].Id : null;
+                }
+
+                ViewBag.ListaCanciones = lista.Select(c => c.Id).ToList();
+            }
+            else if (albumId.HasValue)
+            {
+                var album = (await _albumsService.GetAlbumsAsync()).FirstOrDefault(a => a.Id == albumId);
+                if (album == null || album.Canciones == null || !album.Canciones.Any()) return NotFound();
+
+                var lista = album.Canciones.ToList();
+
+                if (modoAleatorio)
+                {
+                    var aleatoria = lista.Where(c => c.Id != id)
+                                         .OrderBy(c => Guid.NewGuid())
+                                         .FirstOrDefault();
                     ViewBag.CancionSiguiente = aleatoria?.Id;
                 }
                 else
@@ -91,10 +114,12 @@ namespace RaymiMusic.AppWeb.Controllers
                 var aleatoria = todas.OrderBy(x => Guid.NewGuid()).FirstOrDefault(x => x.Id != id);
                 ViewBag.CancionSiguiente = aleatoria?.Id;
             }
+
             ViewBag.ReturnUrl = string.IsNullOrWhiteSpace(returnUrl) ? Url.Action("Index", "Home") : returnUrl;
 
             return View(song);
         }
+
         [HttpPost]
         public IActionResult ToggleAleatorioAjax()
         {
