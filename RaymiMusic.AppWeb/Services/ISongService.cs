@@ -9,6 +9,7 @@ namespace RaymiMusic.AppWeb.Services
         Task<IEnumerable<SongDTO>> GetAllAsync();
         Task<IEnumerable<SongDTO>> SearchAsync(string query);
         Task<SongDTO?> GetByIdAsync(Guid id);
+  
 
     }
 }

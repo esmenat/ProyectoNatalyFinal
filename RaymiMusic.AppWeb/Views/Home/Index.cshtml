@@ -99,7 +99,7 @@ else
                     <td>@s.ArtistaNombre</td>
                     <td>@s.Duracion.ToString(@"mm\:ss")</td>
                     <td>
-                        <a asp-controller="Player" asp-action="Play" asp-route-id="@s.Id"
+                        <a asp-controller="Player" asp-action="Play" asp-route-id="@s.Id" asp-route-returnUrl="@Context.Request.Path"
                            class="btn btn-sm btn-primary">
                             ▶︎ Reproducir
                         </a>

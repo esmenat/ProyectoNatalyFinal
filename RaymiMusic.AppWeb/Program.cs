@@ -63,7 +63,7 @@ builder.Services.AddAuthorization();
 builder.Services.Configure<SendGridOptions>(
     builder.Configuration.GetSection("SendGrid"));
 builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
-
+builder.Services.AddSession();
 var app = builder.Build();
 
 /* ---------- Middleware ---------- */
@@ -74,11 +74,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();                       // 30 días por defecto
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthentication();                 // ⚠️ primero autenticación
 app.UseAuthorization();                  // luego autorización
 
