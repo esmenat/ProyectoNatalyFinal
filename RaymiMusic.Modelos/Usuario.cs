@@ -25,9 +25,11 @@ namespace RaymiMusic.Modelos
 
         // Perfil 1:1
         public Perfil? Perfil { get; set; }
+        public string? UrlFotoPerfil { get; set; }
 
         // Listas de reproducción del usuario 1:N
         public ICollection<ListaReproduccion> ListasReproduccion { get; set; }
             = new List<ListaReproduccion>();
+        public ICollection<Follow>Follows { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace RaymiMusic.AppWeb.Controllers
 
         // POST /Account/Register
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM vm)
+        public async Task<IActionResult> RegisterUser(RegisterVM vm)
         {
             if (!ModelState.IsValid) return View(vm);
 
@@ -53,7 +53,32 @@ namespace RaymiMusic.AppWeb.Controllers
                 Rol = Roles.Free,
                 PlanSuscripcionId = planFreeId
             };
+
             _ctx.Usuarios.Add(usuario);
+            string? nombreArchivo = null;
+
+            if (vm.FotoPerfil != null && vm.FotoPerfil.Length > 0)
+            {
+                // Crear nombre único
+                var extension = Path.GetExtension(vm.FotoPerfil.FileName);
+                nombreArchivo = $"{Guid.NewGuid()}{extension}";
+                var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "media", "usuarios", nombreArchivo);
+
+                // Crear carpeta si no existe
+                var directorio = Path.GetDirectoryName(ruta);
+                if (!Directory.Exists(directorio))
+                    Directory.CreateDirectory(directorio);
+
+                // Guardar archivo
+                using (var stream = new FileStream(ruta, FileMode.Create))
+                {
+                    await vm.FotoPerfil.CopyToAsync(stream);
+                }
+
+                // Guardar la URL en el usuario
+                usuario.UrlFotoPerfil = nombreArchivo;
+            }
+
             await _ctx.SaveChangesAsync();
 
             // 2) Generar token de verificación
@@ -269,6 +294,7 @@ namespace RaymiMusic.AppWeb.Controllers
                 PlanSuscripcionId = planFreeId
             };
             _ctx.Usuarios.Add(usuario);
+
             await _ctx.SaveChangesAsync();
 
             // 2) Crear registro en Artistas (sin UsuarioId)

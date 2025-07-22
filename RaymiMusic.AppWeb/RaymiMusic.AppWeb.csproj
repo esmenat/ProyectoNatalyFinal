@@ -28,4 +28,8 @@
     <ProjectReference Include="..\RaymiMusic.Modelos\RaymiMusic.Modelos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\perfilUser\" />
+  </ItemGroup>
+
 </Project>

@@ -352,6 +352,9 @@ namespace RaymiMusic.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UrlFotoPerfil")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PlanSuscripcionId");
@@ -427,7 +430,7 @@ namespace RaymiMusic.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
-                        .WithMany()
+                        .WithMany("Follows")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -528,6 +531,8 @@ namespace RaymiMusic.Api.Migrations
 
             modelBuilder.Entity("RaymiMusic.Modelos.Usuario", b =>
                 {
+                    b.Navigation("Follows");
+
                     b.Navigation("ListasReproduccion");
 
                     b.Navigation("Perfil");

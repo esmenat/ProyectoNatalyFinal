@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaymiMusic.Api.Data;
 using RaymiMusic.Modelos;
+using SendGrid.Helpers.Mail;
 
 namespace RaymiMusic.AppWeb.Controllers
 {
@@ -103,6 +104,15 @@ namespace RaymiMusic.AppWeb.Controllers
             var artista = await _ctx.Artistas.FindAsync(id);
             if (artista == null) return NotFound();
             return View(artista);
+        }
+        public IActionResult PerfilPublico(Guid id)
+        {
+            var artista = _ctx.Artistas.FirstOrDefault(a => a.Id == id);
+
+            if (artista == null)
+                return NotFound();
+
+            return View(artista); // o un ViewModel si estás usando uno
         }
 
         // POST: /Artistas/Delete/{id}

@@ -12,8 +12,8 @@ using RaymiMusic.Api.Data;
 namespace RaymiMusic.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250716215146_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250721234028_TodoJunto")]
+    partial class TodoJunto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,6 +164,32 @@ namespace RaymiMusic.Api.Migrations
                     b.ToTable("EmailConfirmations");
                 });
 
+            modelBuilder.Entity("RaymiMusic.Modelos.Follow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("ArtistaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FechaSeguimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Follow");
+                });
+
             modelBuilder.Entity("RaymiMusic.Modelos.Genero", b =>
                 {
                     b.Property<Guid>("Id")
@@ -211,7 +237,8 @@ namespace RaymiMusic.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UsuarioId")
+                    b.Property<Guid?>("UsuarioId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -219,6 +246,52 @@ namespace RaymiMusic.Api.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("ListasReproduccion");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.Pago", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CodigoSeguridad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaPago")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NombreTitular")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroDeTarjeta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PlanSuscripcionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanSuscripcionId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Pago");
                 });
 
             modelBuilder.Entity("RaymiMusic.Modelos.Perfil", b =>
@@ -280,6 +353,9 @@ namespace RaymiMusic.Api.Migrations
 
                     b.Property<string>("Rol")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlFotoPerfil")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -348,6 +424,25 @@ namespace RaymiMusic.Api.Migrations
                     b.Navigation("ListaReproduccion");
                 });
 
+            modelBuilder.Entity("RaymiMusic.Modelos.Follow", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.Artista", "Artista")
+                        .WithMany()
+                        .HasForeignKey("ArtistaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
+                        .WithMany("Follows")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artista");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("RaymiMusic.Modelos.ListaReproduccion", b =>
                 {
                     b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
@@ -355,6 +450,25 @@ namespace RaymiMusic.Api.Migrations
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.Pago", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.PlanSuscripcion", "PlanSuscripcion")
+                        .WithMany()
+                        .HasForeignKey("PlanSuscripcionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlanSuscripcion");
 
                     b.Navigation("Usuario");
                 });
@@ -420,6 +534,8 @@ namespace RaymiMusic.Api.Migrations
 
             modelBuilder.Entity("RaymiMusic.Modelos.Usuario", b =>
                 {
+                    b.Navigation("Follows");
+
                     b.Navigation("ListasReproduccion");
 
                     b.Navigation("Perfil");
