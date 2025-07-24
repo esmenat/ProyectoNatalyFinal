@@ -10,5 +10,6 @@ namespace RaymiMusic.AppWeb.Services
         Task<ArtistDashboardVM?> GetDashboardAsync(string userId);
         Task<IEnumerable<Artista>> GetAllArtistasSearchAsync(string? query);
         Task<Artista> GetArtistaAsync(Guid id);
+        Task<IEnumerable<Artista>> ObtenerArtistasAsync();
     }
 }

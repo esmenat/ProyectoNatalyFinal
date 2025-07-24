@@ -1,0 +1,56 @@
+﻿@model RaymiMusic.AppWeb.Models.HomeIndexVM
+
+@{
+    ViewData["Title"] = "Explorar Todo";
+}
+
+<h2>Explorar Géneros</h2>
+
+<!-- Mostrar mensaje de error si no hay géneros -->
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-warning">@ViewBag.ErrorMessage</div>
+}
+
+<div class="row">
+    @if (Model.Generos.Any())
+    {
+        @foreach (var genero in Model.Generos)
+        {
+            // Generar un color aleatorio en formato hexadecimal
+            var randomColor = String.Format("#{0:X6}", new Random().Next(0x1000000));
+
+            <div class="col-md-3 mb-4">
+                <!-- Hacer que el cuadro actúe como un botón grande y cuadrado -->
+                <a href="@Url.Action("Index", "ExplorarTodo", new { id = genero.Id })" class="card text-center" style="width: 18rem; height: 200px; border-radius: 10px; overflow: hidden; background-color: @randomColor; display: block; text-decoration: none; cursor: pointer;">
+                    <div class="card-body d-flex align-items-center justify-content-center" style="height: 100%;">
+                        <!-- Nombre centrado con fuente Cooper Hewitt y sin imagen -->
+                        <h5 class="card-title text-white" style="font-family: 'Cooper Hewitt', sans-serif; font-size: 1.5rem;">@genero.Nombre</h5>
+                    </div>
+                </a>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No se encontraron géneros disponibles.</p>
+    }
+</div>
+
+<h2>Explorar Artistas</h2>
+
+<div class="row">
+    @foreach (var artista in Model.Artistas)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <!-- Usar la propiedad FotoUrl del artista para la imagen -->
+                <img src="@Url.Content(artista.UrlFotoPerfil ?? "~/images/artista_default.jpg")" class="card-img-top" alt="Artista" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@artista.NombreArtistico</h5>
+                    <a href="@Url.Action("Details", "Artista", new { id = artista.Id })" class="btn btn-primary">Ver Artista</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

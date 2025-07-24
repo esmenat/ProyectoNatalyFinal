@@ -5,24 +5,30 @@ using Microsoft.AspNetCore.Mvc;
 using RaymiMusic.AppWeb.Services;
 using RaymiMusic.AppWeb.Models;
 using System.Security.Claims;
+using RaymiMusic.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 
 namespace RaymiMusic.AppWeb.Controllers
 {
     [Authorize]
     public class PlayerController : Controller
     {
+        private readonly AppDbContext _ctx;
+      
         private readonly ISongService _songService;
         private readonly IPlanesService _planesService;
         private readonly IWebHostEnvironment _env;
         private readonly IPlaylistService _playlistService;
         private readonly IAlbumsService _albumsService;
-        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService,IAlbumsService albumsService)
+        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService,IAlbumsService albumsService,AppDbContext _ctx)
         {
             _songService = songService;
             _planesService = planesService;
             _env = env;
             _playlistService = playlistService;
             _albumsService = albumsService;
+            _ctx = _ctx;
         }
 
         // GET: /Player/Play/{id}
@@ -119,7 +125,6 @@ namespace RaymiMusic.AppWeb.Controllers
 
             return View(song);
         }
-
         [HttpPost]
         public IActionResult ToggleAleatorioAjax()
         {
@@ -128,6 +133,44 @@ namespace RaymiMusic.AppWeb.Controllers
 
             return Json(new { estado = !actual });
         }
+
+        public async Task<IActionResult> Descargar(Guid id)
+        {
+            // Buscar la canción en la base de datos
+            var cancion = await _ctx.Canciones.FindAsync(id);
+
+            // Verificar si la canción existe
+            if (cancion == null)
+            {
+                return NotFound();
+            }
+
+            // Obtener el ID del usuario y verificar su plan de suscripción
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _ctx.Usuarios.FindAsync(userId);
+
+            if (user == null || user.PlanSuscripcion.ToString() == "Free") // Verifica si el plan de suscripción es "Free"
+            {
+                TempData["Message"] = "Debe tener un plan de suscripción diferente a Free para descargar la canción.";
+                return RedirectToAction("Index", "Home"); // Redirige al inicio o a otra página de tu elección
+            }
+
+            // Ruta del archivo de la canción
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", cancion.RutaArchivo);
+
+            // Verificar si el archivo existe
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("El archivo no existe.");
+            }
+
+            // Leer el archivo
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            // Retornar el archivo para la descarga
+            return File(fileBytes, "application/octet-stream", Path.GetFileName(filePath));
+        }
+
 
 
     }

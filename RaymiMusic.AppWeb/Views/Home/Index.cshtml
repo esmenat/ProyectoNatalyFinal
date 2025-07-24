@@ -4,7 +4,15 @@
     ViewData["Title"] = "Inicio";
 }
 
-<h1>RaymiMusic</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Título -->
+    <h1>RaymiMusic</h1>
+
+    <!-- Botón para explorar todos los géneros -->
+    <a href="@Url.Action("Index", "ExplorarTodo")" class="btn btn-success btn-lg">
+        Explorar Todo
+    </a>
+</div>
 
 <!-- Formulario de búsqueda -->
 <form method="get" asp-action="Index" class="mb-4">
@@ -14,6 +22,7 @@
         <button class="btn btn-primary">Buscar</button>
     </div>
 </form>
+
 
 <!-- ARTISTAS DESTACADOS -->
 @if (Model.Artistas != null && Model.Artistas.Any())

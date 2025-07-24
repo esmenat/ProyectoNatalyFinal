@@ -24,6 +24,10 @@ builder.Services.AddHttpClient<IFollowService, FollowService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
 });
+builder.Services.AddHttpClient<IGenerosService, GenerosService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);
+});
 builder.Services.AddHttpClient<IAlbumsService, AlbumsService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]);

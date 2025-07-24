@@ -75,6 +75,7 @@ namespace RaymiMusic.AppWeb.Services
             var artista = await _http.GetFromJsonAsync<Artista>($"api/Artistas/{id}");
             return artista ?? throw new Exception("Artista no encontrado");
         }
+        
 
         public async Task<IEnumerable<Artista>> GetAllArtistasSearchAsync(string? query)
         {
@@ -86,5 +87,9 @@ namespace RaymiMusic.AppWeb.Services
             return artistas ?? Array.Empty<Artista>();
         }
 
+        public Task<IEnumerable<Artista>> ObtenerArtistasAsync()
+        {
+            return _http.GetFromJsonAsync<IEnumerable<Artista>>("api/Artistas");
+        }
     }
 }

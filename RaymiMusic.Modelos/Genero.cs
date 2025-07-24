@@ -17,6 +17,7 @@ namespace RaymiMusic.Modelos
 
         public ICollection<Cancion> Canciones { get; set; }
             = new List<Cancion>();
+        
     }
 
 }

@@ -27,7 +27,13 @@ namespace RaymiMusic.Api.Controllers
                                  .Include(g => g.Canciones)
                                  .ToListAsync();
         }
-
+        // GET: api/Generos
+        [HttpGet("generos")]
+        public async Task<ActionResult<IEnumerable<Genero>>> GetGeneross()
+        {
+            var generos = await _context.Generos.ToListAsync();
+            return Ok(generos);
+        }
         // GET: api/Generos/{id}
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Genero>> GetGenero(Guid id)

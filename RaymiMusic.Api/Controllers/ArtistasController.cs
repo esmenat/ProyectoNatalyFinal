@@ -29,6 +29,15 @@ namespace RaymiMusic.Api.Controllers
                                  .OrderBy(a => a.NombreArtistico)
                                  .ToListAsync();
         }
+        [HttpGet("Artistas")]
+        public async Task<ActionResult<IEnumerable<Artista>>> GetAllArtistas()
+        {
+            return await _context.Artistas
+                                 .Include(a => a.Canciones)
+                                 .Include(a => a.Albumes)
+                                 .OrderBy(a => a.NombreArtistico)
+                                 .ToListAsync();
+        }
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Artista>>> GetArtistasSearch([FromQuery] string? query)
         {
