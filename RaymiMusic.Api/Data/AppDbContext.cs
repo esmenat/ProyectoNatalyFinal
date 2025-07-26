@@ -18,7 +18,8 @@ namespace RaymiMusic.Api.Data
         public DbSet<ListaReproduccion> ListasReproduccion { get; set; }
         public DbSet<CancionLista> CancionesEnListas { get; set; }
         public DbSet<ListaPublica> ListasPublicas { get; set; }
-
+        public DbSet<Descarga> Descargas { get; set; }
+        public DbSet<HistorialReproducciones> HistorialReproducciones { get; set; } = default!;
 
         public DbSet<EmailConfirmation> EmailConfirmations { get; set; }
         public DbSet<RaymiMusic.Modelos.Follow> Follow { get; set; } = default!;

@@ -21,7 +21,9 @@ namespace RaymiMusic.AppWeb.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly IPlaylistService _playlistService;
         private readonly IAlbumsService _albumsService;
-        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService,IAlbumsService albumsService,AppDbContext _ctx)
+        private readonly IGenerosService _generosService;
+
+        public PlayerController(ISongService songService, IPlanesService planesService, IWebHostEnvironment env, IPlaylistService playlistService,IAlbumsService albumsService, IGenerosService generoService,AppDbContext _ctx)
         {
             _songService = songService;
             _planesService = planesService;
@@ -29,11 +31,12 @@ namespace RaymiMusic.AppWeb.Controllers
             _playlistService = playlistService;
             _albumsService = albumsService;
             _ctx = _ctx;
+            _generosService = generoService;
         }
 
         // GET: /Player/Play/{id}
 
-        public async Task<IActionResult> Play(Guid id, Guid? playlistId = null, Guid? albumId = null, string? returnUrl = null)
+        public async Task<IActionResult> Play(Guid id, Guid? playlistId = null, Guid? albumId = null, Guid? generoId = null, string? returnUrl = null)
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
@@ -97,6 +100,29 @@ namespace RaymiMusic.AppWeb.Controllers
                 if (album == null || album.Canciones == null || !album.Canciones.Any()) return NotFound();
 
                 var lista = album.Canciones.ToList();
+
+                if (modoAleatorio)
+                {
+                    var aleatoria = lista.Where(c => c.Id != id)
+                                         .OrderBy(c => Guid.NewGuid())
+                                         .FirstOrDefault();
+                    ViewBag.CancionSiguiente = aleatoria?.Id;
+                }
+                else
+                {
+                    var indexActual = lista.FindIndex(c => c.Id == id);
+                    ViewBag.CancionAnterior = indexActual > 0 ? (Guid?)lista[indexActual - 1].Id : null;
+                    ViewBag.CancionSiguiente = indexActual < lista.Count - 1 ? (Guid?)lista[indexActual + 1].Id : null;
+                }
+
+                ViewBag.ListaCanciones = lista.Select(c => c.Id).ToList();
+            }
+            else if (generoId.HasValue)
+            {
+                var genero = (await _generosService.GetAllGenerosAsync()).FirstOrDefault(a => a.Id == generoId);
+                if (genero == null || genero.Canciones == null || genero.Canciones.Count == 0) return NotFound();
+
+                var lista = genero.Canciones.ToList();
 
                 if (modoAleatorio)
                 {

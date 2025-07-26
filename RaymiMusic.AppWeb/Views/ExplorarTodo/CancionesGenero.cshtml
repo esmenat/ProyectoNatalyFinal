@@ -1,0 +1,102 @@
+﻿@model RaymiMusic.Modelos.Genero
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = $"Canciones del género {Model.Nombre}";
+}
+
+<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        color: #1DB954;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .table-dark {
+        background-color: #181818;
+    }
+
+    .table thead th {
+        background-color: #1e1e1e;
+        color: #1DB954;
+        border-bottom: 1px solid #282828;
+    }
+
+    .table td, .table th {
+        border-top: 1px solid #282828;
+        color: #ffffff;
+        vertical-align: middle;
+    }
+
+    audio {
+        height: 30px;
+        background-color: transparent;
+    }
+
+    .btn-back {
+        background-color: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 8px 20px;
+        margin-top: 20px;
+    }
+
+        .btn-back:hover {
+            background-color: #333;
+        }
+</style>
+
+<div class="container mt-4">
+    <h2>Canciones del género: @Model.Nombre</h2>
+
+    @if (Model.Canciones != null && Model.Canciones.Any())
+    {
+        <div class="table-responsive rounded shadow">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Duración</th>
+                        <th>Artista</th>
+                        <th>Álbum</th>
+                        <th>Reproducir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cancion in Model.Canciones)
+                    {
+                        <tr>
+                            <td>@cancion.Titulo</td>
+                            <td>@cancion.Duracion</td>
+                            <td>@(cancion.Artista?.NombreArtistico ?? "Desconocido")</td>
+                            <td>@(cancion.Album?.Titulo ?? "Ninguno")</td>
+                            <td>
+                                <a asp-controller="Player" asp-action="Play" asp-route-id="@cancion.Id" asp-route-returnUrl="@Context.Request.Path" asp-route-generoId="@Model.Id"
+                                   class="btn btn-sm btn-primary">
+                                    ▶︎ Reproducir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-warning">No hay canciones registradas para este género.</p>
+    }
+
+    <!-- Botón volver -->
+    <div class="d-flex justify-content-start">
+        <a asp-controller="ExplorarTodo" asp-action="Index" class="btn btn-back">
+            ← Volver al inicio
+        </a>
+    </div>
+</div>

@@ -38,9 +38,14 @@ namespace RaymiMusic.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Genero>> GetGenero(Guid id)
         {
-            var genero = await _context.Generos
-                                       .Include(g => g.Canciones)
-                                       .FirstOrDefaultAsync(g => g.Id == id);
+            var genero = _context.Generos
+                .Include(g => g.Canciones)
+                    .ThenInclude(c => c.Artista)
+                .Include(g => g.Canciones)
+                    .ThenInclude(c => c.Album)
+                .FirstOrDefault(g => g.Id == id);
+
+
             if (genero == null) return NotFound();
             return genero;
         }

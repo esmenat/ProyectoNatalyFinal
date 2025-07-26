@@ -10,31 +10,23 @@ namespace RaymiMusic.AppWeb.Services
         {
             _http = http;
         }
+
         public async Task<IEnumerable<Genero>> GetAllGenerosAsync()
         {
-            try
+            var generos = await _http.GetFromJsonAsync<Genero[]>($"api/Generos");
+            if (generos == null)
             {
-                HttpResponseMessage response = await _http.GetAsync("https://localhost:1753/api/Generos");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var generos = await response.Content.ReadFromJsonAsync<IEnumerable<Genero>>();
-                    Console.WriteLine($"Generos obtenidos: {generos?.Count()}");
-                    return generos ?? new List<Genero>();
-                }
-                else
-                {
-                    Console.WriteLine($"Error al obtener géneros: {response.StatusCode}");
-                    return new List<Genero>();
-                }
+                return [];
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Excepción al obtener géneros: {ex.Message}");
-                return new List<Genero>();
-            }
+            return generos;
         }
 
+
+        public async Task<Genero?> GetGeneroByIdAsync(Guid id)
+        {
+            var genero = await _http.GetFromJsonAsync<Genero>($"api/Generos/{id}");
+            return genero;
+        }
     }
 }
 

@@ -12,14 +12,16 @@ public class ExplorarTodoController : Controller
     private readonly ISongService _songsService;
     private readonly IAlbumsService _albumsService;
     private readonly ILogger<ExplorarTodoController> _logger;
+    private readonly IGenerosService _generosService; 
 
-    public ExplorarTodoController(AppDbContext context, IArtistService artistasService, ISongService songsService, IAlbumsService albumsService, ILogger<ExplorarTodoController> logger)
+    public ExplorarTodoController(AppDbContext context, IArtistService artistasService, ISongService songsService, IAlbumsService albumsService, ILogger<ExplorarTodoController> logger, IGenerosService generosService)
     {
         _context = context;  // Inyectar el contexto de la base de datos
         _artistasService = artistasService;
         _songsService = songsService;
         _albumsService = albumsService;
         _logger = logger;
+        _generosService = generosService;
     }
 
     public async Task<IActionResult> Index()
@@ -56,5 +58,10 @@ public class ExplorarTodoController : Controller
             ViewBag.ErrorMessage = "Hubo un error al cargar los géneros. Intente más tarde.";
             return View("Error");
         }
+    }
+    public async Task<IActionResult> CancionesGenero(Guid GeneroId)
+    {
+        var generos = await _generosService.GetGeneroByIdAsync(GeneroId);
+        return View(generos);
     }
 }

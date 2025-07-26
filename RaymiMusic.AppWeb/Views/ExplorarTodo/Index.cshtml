@@ -22,7 +22,7 @@
 
             <div class="col-md-3 mb-4">
                 <!-- Hacer que el cuadro actúe como un botón grande y cuadrado -->
-                <a href="@Url.Action("Index", "ExplorarTodo", new { id = genero.Id })" class="card text-center" style="width: 18rem; height: 200px; border-radius: 10px; overflow: hidden; background-color: @randomColor; display: block; text-decoration: none; cursor: pointer;">
+                <a href ="@Url.Action("CancionesGenero", "ExplorarTodo", new { GeneroId = genero.Id })" class="card text-center" style="width: 18rem; height: 200px; border-radius: 10px; overflow: hidden; background-color: @randomColor; display: block; text-decoration: none; cursor: pointer;">
                     <div class="card-body d-flex align-items-center justify-content-center" style="height: 100%;">
                         <!-- Nombre centrado con fuente Cooper Hewitt y sin imagen -->
                         <h5 class="card-title text-white" style="font-family: 'Cooper Hewitt', sans-serif; font-size: 1.5rem;">@genero.Nombre</h5>
