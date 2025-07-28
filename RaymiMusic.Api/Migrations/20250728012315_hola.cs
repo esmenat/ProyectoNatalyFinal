@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RaymiMusic.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class hola : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -89,7 +89,6 @@ namespace RaymiMusic.Api.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FechaLanzamiento = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NombreArchivoPortada = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ArtistaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -259,31 +258,6 @@ namespace RaymiMusic.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CancionAlbum",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CancionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CancionAlbum", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_CancionAlbum_Albumes_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Albumes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_CancionAlbum_Canciones_CancionId",
-                        column: x => x.CancionId,
-                        principalTable: "Canciones",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Descargas",
                 columns: table => new
                 {
@@ -316,6 +290,32 @@ namespace RaymiMusic.Api.Migrations
                         name: "FK_HistorialReproducciones_Canciones_CancionId",
                         column: x => x.CancionId,
                         principalTable: "Canciones",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LikeCancion",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CancionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LikeCancion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LikeCancion_Canciones_CancionId",
+                        column: x => x.CancionId,
+                        principalTable: "Canciones",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_LikeCancion_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -355,16 +355,6 @@ namespace RaymiMusic.Api.Migrations
                 name: "IX_Albumes_ArtistaId",
                 table: "Albumes",
                 column: "ArtistaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CancionAlbum_AlbumId",
-                table: "CancionAlbum",
-                column: "AlbumId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CancionAlbum_CancionId",
-                table: "CancionAlbum",
-                column: "CancionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Canciones_AlbumId",
@@ -417,6 +407,16 @@ namespace RaymiMusic.Api.Migrations
                 column: "CancionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LikeCancion_CancionId",
+                table: "LikeCancion",
+                column: "CancionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LikeCancion_UsuarioId",
+                table: "LikeCancion",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ListasReproduccion_UsuarioId",
                 table: "ListasReproduccion",
                 column: "UsuarioId");
@@ -441,9 +441,6 @@ namespace RaymiMusic.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CancionAlbum");
-
-            migrationBuilder.DropTable(
                 name: "CancionesEnListas");
 
             migrationBuilder.DropTable(
@@ -457,6 +454,9 @@ namespace RaymiMusic.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "HistorialReproducciones");
+
+            migrationBuilder.DropTable(
+                name: "LikeCancion");
 
             migrationBuilder.DropTable(
                 name: "Pago");

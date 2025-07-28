@@ -12,8 +12,8 @@ using RaymiMusic.Api.Data;
 namespace RaymiMusic.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250721234028_TodoJunto")]
-    partial class TodoJunto
+    [Migration("20250728012315_hola")]
+    partial class hola
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,22 @@ namespace RaymiMusic.Api.Migrations
                     b.ToTable("CancionesEnListas");
                 });
 
+            modelBuilder.Entity("RaymiMusic.Modelos.Descarga", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CancionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CancionId");
+
+                    b.ToTable("Descargas");
+                });
+
             modelBuilder.Entity("RaymiMusic.Modelos.EmailConfirmation", b =>
                 {
                     b.Property<int>("Id")
@@ -203,6 +219,49 @@ namespace RaymiMusic.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Generos");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.HistorialReproducciones", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CancionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FechaReproduccion")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CancionId");
+
+                    b.ToTable("HistorialReproducciones");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.LikeCancion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CancionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CancionId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("LikeCancion");
                 });
 
             modelBuilder.Entity("RaymiMusic.Modelos.ListaPublica", b =>
@@ -424,6 +483,17 @@ namespace RaymiMusic.Api.Migrations
                     b.Navigation("ListaReproduccion");
                 });
 
+            modelBuilder.Entity("RaymiMusic.Modelos.Descarga", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.Cancion", "Cancion")
+                        .WithMany()
+                        .HasForeignKey("CancionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cancion");
+                });
+
             modelBuilder.Entity("RaymiMusic.Modelos.Follow", b =>
                 {
                     b.HasOne("RaymiMusic.Modelos.Artista", "Artista")
@@ -439,6 +509,36 @@ namespace RaymiMusic.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Artista");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.HistorialReproducciones", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.Cancion", "Cancion")
+                        .WithMany()
+                        .HasForeignKey("CancionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cancion");
+                });
+
+            modelBuilder.Entity("RaymiMusic.Modelos.LikeCancion", b =>
+                {
+                    b.HasOne("RaymiMusic.Modelos.Cancion", "Cancion")
+                        .WithMany()
+                        .HasForeignKey("CancionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RaymiMusic.Modelos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cancion");
 
                     b.Navigation("Usuario");
                 });

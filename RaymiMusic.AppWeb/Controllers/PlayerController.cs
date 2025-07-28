@@ -8,6 +8,8 @@ using System.Security.Claims;
 using RaymiMusic.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Mail;
+using RaymiMusic.Modelos;
+using System.Dynamic;
 
 namespace RaymiMusic.AppWeb.Controllers
 {
@@ -63,7 +65,9 @@ namespace RaymiMusic.AppWeb.Controllers
 
             var song = await _songService.GetByIdAsync(id);
             if (song == null) return NotFound();
-
+            var like = await _songService.GetSongLike(Guid.Parse(userId), id);
+            ViewBag.Like = like != null;
+           
             ViewBag.songId = song.Id;
             ViewBag.PlaylistId = playlistId;
             ViewBag.AlbumId = albumId;
@@ -158,6 +162,37 @@ namespace RaymiMusic.AppWeb.Controllers
             HttpContext.Session.SetString("ModoAleatorio", (!actual).ToString().ToLower());
 
             return Json(new { estado = !actual });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleLike([FromBody] Guid idCancion)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return NotFound();
+
+            var like = await _songService.GetSongLike(Guid.Parse(userId), idCancion);
+            bool liked = false;
+
+            if (like != null)
+            {
+                await _songService.DeleteLike(like.Id);
+            }
+            else
+            {
+                var newLike = new LikeCancion
+                {
+                    UsuarioId = Guid.Parse(userId),
+                    CancionId = idCancion,
+                    FechaCreacion = DateTime.UtcNow
+                };
+                await _songService.CreateLikeAsync(newLike);
+                liked = true;
+            }
+
+            return Json(new { liked });
         }
 
         public async Task<IActionResult> Descargar(Guid id)
